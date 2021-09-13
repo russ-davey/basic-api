@@ -39,20 +39,26 @@
                 ;                 :description "Successfully POSTed"}
                 ;            400 {:schema ::specs/api-messages-response
                 ;                 :description "Bad request"}}
-                :handler (fn [{:keys [body-params]}]
-                           (log/infof "data: %s" body-params)
+                :handler (fn
+                           (log/infof "POST received: %s" body-params)
                            (let [{:keys [messages] :as resp} {:messages "hello"
                                                               :response body-params}]
-                             (log/infof "POST received: %s" body-params)
+                             ;(map (fn [row] (log/infof "row: %s" row)) body-params)
                              (if messages
                                {:status 400 :body resp}
                                {:status 201 :body resp})))}
 
-         :get {:summary "get a list of all the records"
+         :get {:summary "get a list of all the records in the registry"
                :handler (fn [_]
                           (let [record-list (db/list-data)]
                             {:status 200
-                             :body record-list}))}}]]
+                             :body record-list}))}
+
+         :delete {:summary "get a list of all the records in the registry"
+                  :handler (fn [_]
+                             (let [record-list (db/list-data)]
+                               {:status 200
+                                :body record-list}))}}]]
 
       {:data {:coercion reitit.coercion.spec/coercion
               :muuntaja m/instance
