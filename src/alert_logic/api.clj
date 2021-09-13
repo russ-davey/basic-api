@@ -9,7 +9,8 @@
             [reitit.ring.middleware.parameters :as parameters]
             [muuntaja.core :as m]
             [taoensso.timbre :as log]
-            [integrant.core :as ig]))
+            [alert-logic.specs :as specs]
+            [alert-logic.db :as db]))
 
 ; TODO: GET - List record
 ; TODO: POST - Add record
@@ -31,27 +32,27 @@
                :swagger {:info {:title "Alert Logic"
                                 :description "API for listing/getting/adding & deleting records"}}
                :handler (swagger/create-swagger-handler)}}]
-       ["/ping"
-        {:get {:summary "pinging"
-               :handler (fn [_]
-                          (log/infof "I've been pinged")
-                          {:status 200
-                           :body "pong"})}}]
        ["/registry"
         {:post {:summary "add record"
-                :parameters {:body ::specs/api-post-body-v1}
+                :parameters {:body ::specs/collection-of-people}
                 ;:responses {201 {:schema ::specs/api-post-response
-                ;                 :description "Successfully POSTed override"
-                ;                 :supplyPoint ::specs/supplyPoint
-                ;                 :overrideMetadata ::specs/overrideMetadata}
+                ;                 :description "Successfully POSTed"}
                 ;            400 {:schema ::specs/api-messages-response
-                ;                 :description "Invalid override, see messages in the response body for more details"}}
-                :handler (fn [{{:keys [data]} :body-params}]
+                ;                 :description "Bad request"}}
+                :handler (fn [{:keys [body-params]}]
+                           (log/infof "data: %s" body-params)
                            (let [{:keys [messages] :as resp} {:messages "hello"
-                                                              :other "it worked"}]
+                                                              :response body-params}]
+                             (log/infof "POST received: %s" body-params)
                              (if messages
                                {:status 400 :body resp}
-                               {:status 201 :body resp})))}}]]
+                               {:status 201 :body resp})))}
+
+         :get {:summary "get a list of all the records"
+               :handler (fn [_]
+                          (let [record-list (db/list-data)]
+                            {:status 200
+                             :body record-list}))}}]]
 
       {:data {:coercion reitit.coercion.spec/coercion
               :muuntaja m/instance
