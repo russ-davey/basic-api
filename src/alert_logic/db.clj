@@ -27,6 +27,13 @@
     (when (not-empty-seq? results)
       results)))
 
+(defn get-by-field-and-value
+  "Hashmap based solution
+  group the data by the field then return by using the value parameter as a key"
+  [table field value]
+  (when-let [grouped (group-by field (get @data/fake-db-atom table))]
+    (grouped value)))
+
 (defn delete-data
   [table id]
   (when-let [results (get-data table id)]

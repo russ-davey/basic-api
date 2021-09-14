@@ -48,15 +48,26 @@
                             {:status 200
                              :body record-list}))}}]
 
-         ["/registry/:registryId"
-          {:delete {:summary "delete a record"
-                    :parameters {:path ::specs/api-delete-registry-record-params}
-                    :handler (fn [req]
-                               (let [registry-id (get-in req [:parameters :path :registryId])
-                                     deletion (db/delete-data :registry registry-id)]
-                                 (if (nil? deletion)
-                                   {:status 404 :body {:messages ["registry ID not found or already deleted."]}}
-                                   {:status 200 :body deletion})))}}]]
+       ["/registry/:registryId"
+        {:delete {:summary "delete a record"
+                  :parameters {:path ::specs/api-delete-registry-record-params}
+                  :handler (fn [req]
+                             (let [registry-id (get-in req [:parameters :path :registryId])
+                                   deletion (db/delete-data :registry registry-id)]
+                               (if (nil? deletion)
+                                 {:status 404 :body {:messages ["registry ID not found or already deleted."]}}
+                                 {:status 200 :body deletion})))}}]
+
+       ["/registry/:field/:value"
+        {:get {:summary "get a list of records in the registry by field and value (i.e. name = John) - case sensitive"
+               :parameters {:path ::specs/get-params}
+               :handler (fn [{{:keys [field value]} :path-params}]
+                          (log/infof "GET by %s = %s" field value)
+                          (let [record-list (db/get-by-field-and-value :registry
+                                                                       (keyword field)
+                                                                       value)]
+                            {:status 200
+                             :body record-list}))}}]]
 
       {:data {:coercion reitit.coercion.spec/coercion
               :muuntaja m/instance
