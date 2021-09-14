@@ -10,13 +10,19 @@
   (testing "reading data from database"
     (is (= data/initial-data {:registry (target/list-data)})))
 
+  (testing "reading from the database for a registry-id"
+    (is (= {:registry-id 2
+            :name "Mary"
+            :surname "Stephenson"
+            :profession "developer"}
+           (first (target/get-data :registry 2)))))
+
   (reset-data)
   (testing "inserting data into database"
-    (let [test-data {:registry-id 5
-                     :name "Test"
-                     :surname "Man"
-                     :profession "Tester"}
-          expected-data (update @data/fake-db-atom :registry #(conj % test-data))
+    (let [test-data [{:name "Test"
+                      :surname "Man"
+                      :profession "Tester"}]
+          expected-data (update @data/fake-db-atom :registry #(conj % (assoc (first test-data) :registry-id 5)))
           _ (target/insert-data :registry test-data)]
       (is (= @data/fake-db-atom
              expected-data) )))

@@ -3,10 +3,21 @@
 
 (def not-empty-seq? (comp not nil? seq))
 
+(defn get-last-registry-id [] (->> @data/fake-db-atom
+                                   :registry
+                                   (sort-by :registry-id)
+                                   last
+                                   :registry-id))
+
+(def index-atom (atom (get-last-registry-id)))
+
 (defn insert-data
   [table data]
-  (swap! data/fake-db-atom update-in [table] conj data)
-  data)
+  (doseq [new-row data]
+    (swap! index-atom inc)
+    (let [new-data (assoc new-row :registry-id @index-atom)]
+      (swap! data/fake-db-atom update-in [table] conj new-data)
+      new-data)))
 
 (defn list-data [] (:registry @data/fake-db-atom))
 

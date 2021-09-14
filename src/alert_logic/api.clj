@@ -35,17 +35,12 @@
        ["/registry"
         {:post {:summary "add record"
                 :parameters {:body ::specs/collection-of-people}
-                ;:responses {201 {:schema ::specs/api-post-response
-                ;                 :description "Successfully POSTed"}
-                ;            400 {:schema ::specs/api-messages-response
-                ;                 :description "Bad request"}}
                 :handler (fn [{:keys [body-params]}]
                            (log/infof "POST received: %s" body-params)
-                           (let [post-result (map (fn [row] (log/infof "row: %s" row)) body-params)]
-                             (log/infof "post result: %s" post-result)
-                             (if post-result
-                               {:status 201 :body body-params}
-                               {:status 400 :body body-params})))}
+                           (let [addition (db/insert-data :registry body-params)]
+                             (if addition
+                               {:status 201 :body addition}
+                               {:status 400 :body addition})))}
 
          :get {:summary "get a list of all the records in the registry"
                :handler (fn [_]
