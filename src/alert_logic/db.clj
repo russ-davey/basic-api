@@ -16,8 +16,8 @@
   (doseq [new-row data]
     (swap! index-atom inc)
     (let [new-data (assoc new-row :registry-id @index-atom)]
-      (swap! data/fake-db-atom update-in [table] conj new-data)
-      new-data)))
+      (swap! data/fake-db-atom update-in [table] conj new-data)))
+  data)
 
 (defn list-data [] (:registry @data/fake-db-atom))
 

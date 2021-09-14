@@ -1,11 +1,12 @@
 (ns alert-logic.specs
   (:require [clojure.spec.alpha :as s]))
 
-(s/def ::name string?)
-(s/def ::surname string?)
-(s/def ::height string?)
-(s/def ::age string?)
-(s/def ::profession string?)
+; Data input validation
+(s/def ::name (s/and string? (partial re-matches #"[A-Za-z .'-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð]{1,100}")))
+(s/def ::surname (s/and string? (partial re-matches #"[A-Za-z .'-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð]{1,100}")))
+(s/def ::height (s/and string? (partial re-matches #"[0-9]{1,3}")))
+(s/def ::age (s/and string? (partial re-matches #"[0-9]{1,3}")))
+(s/def ::profession (s/and string? (partial re-matches #"[A-Za-z ]{1,25}")))
 
 (s/def ::people (s/keys :req-un [::name
                                  ::surname
@@ -14,7 +15,6 @@
                         :opt-un [::height]))
 (s/def ::collection-of-people (s/coll-of ::people))
 
-;(s/def ::value (s/or string? int?))
 (s/def ::field string?)
 (s/def ::value string?)
 
