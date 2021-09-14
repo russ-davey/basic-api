@@ -33,7 +33,7 @@
                                 :description "API for listing/getting/adding & deleting records"}}
                :handler (swagger/create-swagger-handler)}}]
        ["/registry"
-        {:post {:summary "add record"
+        {:post {:summary "add a record to the registry"
                 :parameters {:body ::specs/collection-of-people}
                 :handler (fn [{:keys [body-params]}]
                            (log/infof "POST received: %s" body-params)
@@ -49,7 +49,7 @@
                              :body record-list}))}}]
 
        ["/registry/:registryId"
-        {:delete {:summary "delete a record to the registry"
+        {:delete {:summary "delete a record from the registry"
                   :parameters {:path ::specs/api-delete-registry-record-params}
                   :handler (fn [req]
                              (let [registry-id (get-in req [:parameters :path :registryId])
