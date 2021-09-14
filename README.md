@@ -5,11 +5,11 @@ endpoints for add/deleting/listing and getting data, all can be used via CURL or
 
 ## Usage
 
-1. Make sure you have https://leiningen.org/ and at least Java version 11 installed.
-2. From the root of the project type `lein ring server`.
-3. This should lunch a local webserver running on port 3000 (i.e. http://localhost:3000/)
+1. Make sure you have Leiningen (https://leiningen.org/ / https://github.com/technomancy/leiningen/wiki/Packaging) and at least Java version 11 installed.
+2. Then from the root of the project type `lein run server`.
+3. This should lunch a local webserver running on port 8080 (i.e. http://localhost:8080/)
 4. Going to the above URL should display a swagger UI page with details about the various endpoints that can be used,
- just click "Try it out" to give it a go.
+   just click "Try it out" to give it a go.
 
 ## License
 
