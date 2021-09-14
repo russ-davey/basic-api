@@ -39,26 +39,29 @@
                 ;                 :description "Successfully POSTed"}
                 ;            400 {:schema ::specs/api-messages-response
                 ;                 :description "Bad request"}}
-                :handler (fn
+                :handler (fn [{:keys [body-params]}]
                            (log/infof "POST received: %s" body-params)
-                           (let [{:keys [messages] :as resp} {:messages "hello"
-                                                              :response body-params}]
-                             ;(map (fn [row] (log/infof "row: %s" row)) body-params)
-                             (if messages
-                               {:status 400 :body resp}
-                               {:status 201 :body resp})))}
+                           (let [post-result (map (fn [row] (log/infof "row: %s" row)) body-params)]
+                             (log/infof "post result: %s" post-result)
+                             (if post-result
+                               {:status 201 :body body-params}
+                               {:status 400 :body body-params})))}
 
          :get {:summary "get a list of all the records in the registry"
                :handler (fn [_]
                           (let [record-list (db/list-data)]
                             {:status 200
-                             :body record-list}))}
+                             :body record-list}))}}]
 
-         :delete {:summary "get a list of all the records in the registry"
-                  :handler (fn [_]
-                             (let [record-list (db/list-data)]
-                               {:status 200
-                                :body record-list}))}}]]
+         ["/registry/:registryId"
+          {:delete {:summary "delete a record"
+                    :parameters {:path ::specs/api-delete-registry-record-params}
+                    :handler (fn [req]
+                               (let [registry-id (get-in req [:parameters :path :registryId])
+                                     deletion (db/delete-data :registry registry-id)]
+                                 (if (nil? deletion)
+                                   {:status 404 :body {:messages ["registry ID not found or already deleted."]}}
+                                   {:status 200 :body deletion})))}}]]
 
       {:data {:coercion reitit.coercion.spec/coercion
               :muuntaja m/instance
