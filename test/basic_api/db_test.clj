@@ -1,8 +1,8 @@
-(ns alert-logic.db-test
+(ns basic-api.db-test
   (:require [clojure.test :refer :all]
-            [alert-logic.db :as target]
-            [alert-logic.data :as data]
-            [alert-logic.db :as db]))
+            [basic-api.db :as target]
+            [basic-api.data :as data]
+            [basic-api.db :as db]))
 
 (defn- reset-data []
   (reset! data/fake-db-atom data/initial-data)

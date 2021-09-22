@@ -1,4 +1,4 @@
-(ns alert-logic.api
+(ns basic-api.api
   (:require [reitit.ring :as ring]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
@@ -9,12 +9,8 @@
             [reitit.ring.middleware.parameters :as parameters]
             [muuntaja.core :as m]
             [taoensso.timbre :as log]
-            [alert-logic.specs :as specs]
-            [alert-logic.db :as db]))
-
-; TODO: GET - List record
-; TODO: POST - Add record
-; TODO: list - get - add - delete
+            [basic-api.specs :as specs]
+            [basic-api.db :as db]))
 
 (def ^:private exception-middleware
   (exception/create-exception-middleware
@@ -29,7 +25,7 @@
     (ring/router
       [["/swagger.json"
         {:get {:no-doc true
-               :swagger {:info {:title "Alert Logic"
+               :swagger {:info {:title "Basic API"
                                 :description "API for listing/getting/adding & deleting records"}}
                :handler (swagger/create-swagger-handler)}}]
        ["/registry"

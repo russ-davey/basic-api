@@ -1,4 +1,4 @@
-# alert-logic
+# basic-api
 
 A Clojure library designed to demonstrate a basic API implementation. Uses an atom as a fake database and has several
 endpoints for add/deleting/listing and getting data, all can be used via CURL or through the swagger UI.

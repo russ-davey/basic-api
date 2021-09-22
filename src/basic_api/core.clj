@@ -1,6 +1,6 @@
-(ns alert-logic.core
+(ns basic-api.core
   (:require [ring.adapter.jetty :as ring]
-            [alert-logic.api :as api]))
+            [basic-api.api :as api]))
 
 (defn -main
   [& args]

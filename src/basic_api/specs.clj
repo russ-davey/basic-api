@@ -1,4 +1,4 @@
-(ns alert-logic.specs
+(ns basic-api.specs
   (:require [clojure.spec.alpha :as s]))
 
 ; Data input validation

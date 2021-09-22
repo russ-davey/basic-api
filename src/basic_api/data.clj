@@ -1,4 +1,4 @@
-(ns alert-logic.data)
+(ns basic-api.data)
 
 (def initial-data
   {:registry [{:registry-id 1

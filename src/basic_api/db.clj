@@ -1,5 +1,5 @@
-(ns alert-logic.db
-  (:require [alert-logic.data :as data]))
+(ns basic-api.db
+  (:require [basic-api.data :as data]))
 
 (def not-empty-seq? (comp not nil? seq))
 
